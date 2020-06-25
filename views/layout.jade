@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    script(src='/socket.io/socket.io.js')
+    script(src="https://code.jquery.com/jquery-1.11.1.js")
+    script.
+      var socket = io('http://localhost:3000')
+      function startonClick(){
+        socket.emit('joinRoom',{roomName:'1',socketid:$('#name').val()})
+      }
+      socket.on('recMsg', function(data){
+        console.log("client"+data.text);
+        $('#chat').append(data.user + ":" + data.text)
+      })
+
+      function myOnClick(){
+        socket.emit('reqMsg', {comment: $('#user').val()})
+        $('#user').val('');
+      }
+  body
+    block content
+    <textarea rows="20" cols="30" id="chat"></textarea><br>
+    <input type="text" id="user"><input type="button" value="msg submit" onclick="myOnClick()">
+    <input type="text" id="name"><input type="button" value="name submit" onclick="startonClick()">
+
+
+
